@@ -3,7 +3,6 @@
 namespace Artisaninweb\SoapWrapper;
 
 use Closure;
-use SoapClient;
 use Artisaninweb\SoapWrapper\Exceptions\ServiceNotFound;
 use Artisaninweb\SoapWrapper\Exceptions\ServiceAlreadyExists;
 use Artisaninweb\SoapWrapper\Exceptions\ServiceMethodNotExists;
@@ -32,7 +31,7 @@ class SoapWrapper
    * @return $this
    * @throws ServiceAlreadyExists
    */
-  public function add($name, Closure $closure)
+  public function add(string $name, Closure $closure)
   {
     if (!$this->has($name)) {
       $service = new Service();
@@ -100,7 +99,7 @@ class SoapWrapper
    * @return mixed
    * @throws ServiceNotFound
    */
-    public function client($name, Closure $closure = null)
+    public function client(string $name, Closure $closure)
     {
         if ($this->has($name)) {
             /** @var Service $service */
@@ -128,7 +127,7 @@ class SoapWrapper
    *
    * @return mixed
    */
-  public function call($call, $data = [], $options = [])
+  public function call(string $call, array $data = [], array $options = [])
   {
     list($name, $function) = explode('.', $call, 2);
 
@@ -145,7 +144,7 @@ class SoapWrapper
    *
    * @return bool
    */
-  public function has($name)
+  public function has(string $name)
   {
     return (array_key_exists($name, $this->services));
   }

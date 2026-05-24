@@ -139,7 +139,7 @@ class Service
    *
    * @return $this
    */
-  public function cache($cache)
+  public function cache(int $cache)
   {
     $this->cache = $cache;
 
@@ -161,7 +161,7 @@ class Service
    *
    * @return $this
    */
-  public function classMap(array $classmap)
+  public function classmap(array $classmap)
   {
     $this->classmap = $classmap;
 
@@ -221,9 +221,7 @@ class Service
       $options['local_cert'] = $this->certificate;
     }
 
-    $this->options = array_merge($options, $this->options);
-
-    return $this->options;
+    return array_merge($options, $this->options);
   }
 
   /**

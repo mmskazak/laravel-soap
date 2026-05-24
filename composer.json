@@ -10,12 +10,13 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "ext-soap": "*"
+        "php": "^8.0",
+        "ext-soap": "*",
+        "illuminate/support": "^9.0|^10.0|^11.0"
     },
     "autoload": {
-        "psr-0": {
-            "Artisaninweb\\SoapWrapper": "src/"
+        "psr-4": {
+            "Artisaninweb\\SoapWrapper\\": "src/Artisaninweb/SoapWrapper/"
         }
     },
     "extra": {

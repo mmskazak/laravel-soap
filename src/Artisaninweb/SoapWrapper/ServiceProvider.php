@@ -23,13 +23,15 @@ class ServiceProvider extends LaravelServiceProvider
    */
   public function register()
   {
-    $soapWrapper = new SoapWrapper();
+    $this->app->singleton(SoapWrapper::class, function ($app) {
+      $soapWrapper = new SoapWrapper();
 
-    if (is_array($this->app['config']['soapwrapper'])) {
-      $soapWrapper->addByArray($this->app['config']['soapwrapper']);
-    }
+      $config = $app['config']['soapwrapper'] ?? null;
 
-    $this->app->bindIf(SoapWrapper::class, function () use ($soapWrapper) {
+      if (is_array($config)) {
+        $soapWrapper->addByArray($config);
+      }
+
       return $soapWrapper;
     });
   }
