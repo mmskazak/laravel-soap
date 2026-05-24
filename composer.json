@@ -1,6 +1,6 @@
 {
-    "name": "artisaninweb/laravel-soap",
-    "description": "A SoapClient wrapper integration for Laravel",
+    "name": "mmskazak/laravel-soap",
+    "description": "A SoapClient wrapper integration for Laravel (PHP 8.0+ fork of artisaninweb/laravel-soap)",
     "keywords": ["laravel", "soap", "client", "wrapper"],
     "license": "MIT",
     "authors": [

@@ -1,59 +1,47 @@
 Laravel SoapClient Wrapper
 ===========================
 
-A SoapClient wrapper integration for Laravel.<br/>
-Makes it easy to use Soap in a Laravel application.<br/>
+A SoapClient wrapper integration for Laravel — actively maintained fork of [artisaninweb/laravel-soap](https://github.com/artisaninweb/laravel-soap).
+
+> **Why this fork?** The original package has not been updated since 2021 and targets PHP 5.4+.
+> This fork modernizes the codebase for PHP 8.0+, fixes several bugs, and keeps the same simple API.
 
 Please report any bugs or features here: <br/>
-https://github.com/artisaninweb/laravel-soap/issues/
+https://github.com/mmskazak/laravel-soap/issues/
+
+What's changed
+==============
+
+- **PHP 8.0+** — dropped support for EOL PHP versions (5.x, 7.x)
+- **PSR-4 autoloading** — migrated from deprecated PSR-0
+- **Explicit dependency** on `illuminate/support` (^9.0|^10.0|^11.0)
+- **Fixed** `classMap()` renamed to `classmap()` to match the documented API
+- **Fixed** `getOptions()` was mutating internal state on every call — options no longer accumulate on repeated calls
+- **Fixed** `client()` closure parameter is now required — previously marked optional but always caused a crash if omitted
+- **Improved** `ServiceProvider` uses `singleton()` via the IoC container instead of manual instantiation
+- **Cleaner types** — added `string`/`array`/`int` type hints throughout
 
 Installation
 ============
 
 ## Laravel
 
-####Installation for Laravel 5.2 and above:
+#### Installation (Laravel 9, 10, 11):
 
-Run `composer require artisaninweb/laravel-soap`
+Run `composer require mmskazak/laravel-soap`
 
-Add the service provider in `app/config/app.php`.
+Laravel 5.5+ supports package auto-discovery, so no manual registration is needed.
 
-```php
-Artisaninweb\SoapWrapper\ServiceProvider::class, 
-```
-
-To use the alias, add this to the aliases in `app/config/app.php`.
+If you need to register manually, add the service provider in `config/app.php`:
 
 ```php
-'SoapWrapper' => Artisaninweb\SoapWrapper\Facade\SoapWrapper::class,  
+Artisaninweb\SoapWrapper\ServiceProvider::class,
 ```
 
-
-####Installation for Laravel 5.1 and below :
-
-
-Add `artisaninweb/laravel-soap` as requirement to composer.json
-
-```javascript
-{
-    "require": {
-        "artisaninweb/laravel-soap": "0.3.*"
-    }
-}
-```
-
-> If you're using Laravel 5.5 or higher you can skip the two config setups below.
-
-Add the service provider in `app/config/app.php`.
+To use the facade, add this to the aliases in `config/app.php`:
 
 ```php
-'Artisaninweb\SoapWrapper\ServiceProvider'
-```
-
-To use the facade add this to the facades in `app/config/app.php`.
-
-```php
-'SoapWrapper' => 'Artisaninweb\SoapWrapper\Facade'
+'SoapWrapper' => Artisaninweb\SoapWrapper\Facade::class,
 ```
 
 ## Lumen
