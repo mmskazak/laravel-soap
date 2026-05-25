@@ -20,6 +20,7 @@ What's changed
 - **Fixed** `client()` closure parameter is now required — previously marked optional but always caused a crash if omitted
 - **Improved** `ServiceProvider` uses `singleton()` via the IoC container instead of manual instantiation
 - **Cleaner types** — added `string`/`array`/`int` type hints throughout
+- **Fixed** `Client::SoapCall()` deprecation on PHP 8.1+ — `array $options = null` changed to `?array $options = null`
 
 Installation
 ============

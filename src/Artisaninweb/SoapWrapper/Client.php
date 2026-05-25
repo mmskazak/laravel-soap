@@ -182,7 +182,7 @@ class Client extends SoapClient
    */
   public function SoapCall($function,
     array $params,
-    array $options = null,
+    ?array $options = null,
     $inputHeader = null,
     &$outputHeaders = null
   ) {
