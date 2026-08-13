@@ -6,7 +6,14 @@
     "authors": [
         {
             "name": "Michael van de Rijt",
-            "email": "me@mvdrijt.com"
+            "email": "me@mvdrijt.com",
+            "role": "Original author"
+        },
+        {
+            "name": "mmskazak",
+            "email": "mmskazak@gmail.com",
+            "homepage": "https://github.com/mmskazak",
+            "role": "Maintainer"
         }
     ],
     "require": {
