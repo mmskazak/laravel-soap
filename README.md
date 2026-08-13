@@ -1,6 +1,11 @@
 Laravel SoapClient Wrapper
 ===========================
 
+[![Tests](https://github.com/mmskazak/laravel-soap/actions/workflows/tests.yml/badge.svg)](https://github.com/mmskazak/laravel-soap/actions/workflows/tests.yml)
+[![Latest Stable Version](https://poser.pugx.org/mmskazak/laravel-soap/v/stable)](https://packagist.org/packages/mmskazak/laravel-soap)
+[![License](https://poser.pugx.org/mmskazak/laravel-soap/license)](LICENSE)
+[![PHP Version](https://img.shields.io/badge/php-%5E8.0-777bb4)](composer.json)
+
 A SoapClient wrapper integration for Laravel — actively maintained fork of [artisaninweb/laravel-soap](https://github.com/artisaninweb/laravel-soap).
 
 > **Why this fork?** The original package has not been updated since 2021 and targets PHP 5.4+.
@@ -8,6 +13,13 @@ A SoapClient wrapper integration for Laravel — actively maintained fork of [ar
 
 Please report any bugs or features here: <br/>
 https://github.com/mmskazak/laravel-soap/issues/
+
+Requirements
+============
+
+- PHP 8.0 or higher
+- The `ext-soap` PHP extension
+- Laravel or Lumen 9, 10, 11 or 12 (optional — the package also works standalone)
 
 What's changed
 ==============
@@ -181,6 +193,35 @@ $this->soapWrapper->add('Currency', function ($service) {
 });
 ```
 
+Registering services from an array
+============
+
+Instead of calling `add()` per service, you can register several at once with `addByArray()` —
+this is the same format used by the publishable `config/soapwrapper.php` file:
+
+```php
+$this->soapWrapper->addByArray([
+    'Currency' => [
+        'wsdl'      => 'http://currencyconverter.kowabunga.net/converter.asmx?WSDL',
+        'trace'     => true,
+        'cache'     => WSDL_CACHE_NONE,
+        'classmap'  => [
+            GetConversionAmount::class,
+            GetConversionAmountResponse::class,
+        ],
+        'options'   => [
+            'login'    => 'username',
+            'password' => 'password',
+        ],
+        'certificate' => storage_path('certs/client.pem'),
+    ],
+]);
+```
+
+Each key must match a `Service` setter method (`wsdl`, `trace`, `cache`, `classmap`, `options`,
+`certificate`, `header`, `customHeader`); an unknown key throws `ServiceMethodNotExists`, and a
+duplicate service name throws `ServiceAlreadyExists`.
+
 Classmap
 ============
 
@@ -301,3 +342,26 @@ class GetConversionAmountResponse
   }
 }
 ```
+
+Testing
+============
+
+```
+composer install
+composer test
+```
+
+The test suite requires the `ext-soap` PHP extension. CI runs it against PHP 8.0 through 8.3
+via [`.github/workflows/tests.yml`](.github/workflows/tests.yml).
+
+Contributing
+============
+
+Bug reports, feature requests and pull requests are welcome at
+https://github.com/mmskazak/laravel-soap/issues/. Please include a failing test case with any
+bug report or bug-fix pull request when possible.
+
+License
+============
+
+This package is open-sourced software licensed under the [MIT license](LICENSE).
