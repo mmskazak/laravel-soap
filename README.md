@@ -49,19 +49,57 @@ Installation
 
 Run `composer require mmskazak/laravel-soap`
 
-Laravel 5.5+ supports package auto-discovery, so no manual registration is needed.
+Laravel 5.5+ supports package auto-discovery, so on **every supported version (9-12)** the
+service provider and the `SoapWrapper` facade are registered automatically — no manual step
+needed. Manual registration below is only required if you've disabled discovery for this
+package (`dont-discover` in your app's `composer.json`).
 
-If you need to register manually, add the service provider in `config/app.php`:
+> **Laravel 11+ note:** the default application skeleton no longer ships a `providers` or
+> `aliases` array in `config/app.php` — providers now live in `bootstrap/providers.php`, and
+> there's no default facade alias registry. Use the instructions that match your app's skeleton.
+
+**Laravel 9 / 10** (or any app that still has `providers`/`aliases` arrays in `config/app.php`):
 
 ```php
-Artisaninweb\SoapWrapper\ServiceProvider::class,
+<?php
+// config/app.php
+
+return [
+    // ...
+
+    'providers' => [
+        // ...
+        Artisaninweb\SoapWrapper\ServiceProvider::class,
+    ],
+
+    'aliases' => [
+        // ...
+        'SoapWrapper' => Artisaninweb\SoapWrapper\Facade::class,
+    ],
+];
 ```
 
-To use the facade, add this to the aliases in `config/app.php`:
+**Laravel 11 / 12** (minimal skeleton):
+
+Register the provider in `bootstrap/providers.php`:
 
 ```php
-'SoapWrapper' => Artisaninweb\SoapWrapper\Facade::class,
+<?php
+
+return [
+    App\Providers\AppServiceProvider::class,
+    Artisaninweb\SoapWrapper\ServiceProvider::class,
+];
 ```
+
+The facade doesn't need an alias — just import it where you use it:
+
+```php
+use Artisaninweb\SoapWrapper\Facade as SoapWrapper;
+```
+
+If you'd rather keep a global `SoapWrapper` alias like on Laravel 9/10, add an `aliases` array
+back to `config/app.php` and register it there the same way.
 
 ## Lumen
 
