@@ -14,20 +14,26 @@ What's changed
 
 - **PHP 8.0+** — dropped support for EOL PHP versions (5.x, 7.x)
 - **PSR-4 autoloading** — migrated from deprecated PSR-0
-- **Explicit dependency** on `illuminate/support` (^9.0|^10.0|^11.0)
+- **Explicit dependency** on `illuminate/support` (^9.0|^10.0|^11.0|^12.0)
 - **Fixed** `classMap()` renamed to `classmap()` to match the documented API
 - **Fixed** `getOptions()` was mutating internal state on every call — options no longer accumulate on repeated calls
 - **Fixed** `client()` closure parameter is now required — previously marked optional but always caused a crash if omitted
 - **Improved** `ServiceProvider` uses `singleton()` via the IoC container instead of manual instantiation
 - **Cleaner types** — added `string`/`array`/`int` type hints throughout
 - **Fixed** `Client::SoapCall()` deprecation on PHP 8.1+ — `array $options = null` changed to `?array $options = null`
+- **Fixed** `getOptions()` no longer leaks `null` for `trace`/`cache_wsdl` into the underlying `SoapClient` when those options aren't set explicitly
+- **Fixed** `SoapWrapper::call()` now throws a clear `InvalidArgumentException` instead of a PHP warning when the call string isn't in `Service.method` format
+- **Added** a publishable configuration file (`config/soapwrapper.php`)
+- **Added** a PHPUnit test suite and a GitHub Actions CI workflow (PHP 8.0-8.3)
+
+See [CHANGELOG.md](CHANGELOG.md) for the full release history.
 
 Installation
 ============
 
 ## Laravel
 
-#### Installation (Laravel 9, 10, 11):
+#### Installation (Laravel 9, 10, 11, 12):
 
 Run `composer require mmskazak/laravel-soap`
 
@@ -59,6 +65,26 @@ class_alias('Artisaninweb\SoapWrapper\Facade', 'SoapWrapper');
 
 *Facades must be enabled.*
 
+## Configuration file (optional)
+
+Services can also be registered through a config file instead of `SoapWrapper::add()`.
+Publish it with:
+
+```
+php artisan vendor:publish --tag=soapwrapper-config
+```
+
+This creates `config/soapwrapper.php`, where each top-level key is a service name mapped to
+`Service` setter options (`wsdl`, `trace`, `cache`, `classmap`, `options`, `certificate`):
+
+```php
+return [
+    'Currency' => [
+        'wsdl'  => 'https://www.example.com/service.wsdl',
+        'trace' => true,
+    ],
+];
+```
 
 Usage
 ============
