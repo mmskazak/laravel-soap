@@ -8,17 +8,17 @@ use SoapHeader;
 class Service
 {
   /**
-   * @var SoapClient
+   * @var SoapClient|null
    */
   protected $client;
 
   /**
-   * @var string
+   * @var string|null
    */
   protected $wsdl;
 
   /**
-   * @var boolean
+   * @var bool
    */
   protected $trace;
 
@@ -28,12 +28,12 @@ class Service
   protected $headers;
 
   /**
-   * @var string
+   * @var int
    */
   protected $cache;
 
   /**
-   * @var bool
+   * @var string|bool
    */
   protected $certificate;
 
@@ -54,6 +54,8 @@ class Service
   {
     $this->wsdl        = null;
     $this->client      = null;
+    $this->trace       = false;
+    $this->cache       = WSDL_CACHE_NONE;
     $this->certificate = false;
     $this->options     = [];
     $this->classmap    = [];
@@ -111,11 +113,11 @@ class Service
   /**
    * Set trace option - enables tracing of request
    *
-   * @param boolean $trace
+   * @param bool $trace
    *
    * @return $this
    */
-  public function trace($trace)
+  public function trace(bool $trace)
   {
     $this->trace = $trace;
 
@@ -125,7 +127,7 @@ class Service
   /**
    * Get the trace option
    *
-   * @return boolean
+   * @return bool
    */
   public function getTrace()
   {
@@ -133,9 +135,9 @@ class Service
   }
 
   /**
-   * Set the WSDL cache
+   * Set the WSDL cache (e.g. WSDL_CACHE_NONE, WSDL_CACHE_DISK, WSDL_CACHE_MEMORY, WSDL_CACHE_BOTH)
    *
-   * @param $cache
+   * @param int $cache
    *
    * @return $this
    */
@@ -149,7 +151,7 @@ class Service
   /**
    * Get the WSDL cache
    *
-   * @return string
+   * @return int
    */
   public function getCache()
   {

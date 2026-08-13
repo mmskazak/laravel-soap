@@ -3,6 +3,7 @@
 namespace Artisaninweb\SoapWrapper;
 
 use Closure;
+use InvalidArgumentException;
 use Artisaninweb\SoapWrapper\Exceptions\ServiceNotFound;
 use Artisaninweb\SoapWrapper\Exceptions\ServiceAlreadyExists;
 use Artisaninweb\SoapWrapper\Exceptions\ServiceMethodNotExists;
@@ -126,9 +127,17 @@ class SoapWrapper
    * @param array  $data
    *
    * @return mixed
+   * @throws InvalidArgumentException
    */
   public function call(string $call, array $data = [], array $options = [])
   {
+    if (!str_contains($call, '.')) {
+      throw new InvalidArgumentException(sprintf(
+        "Invalid call '%s', expected format 'ServiceName.method'.",
+        $call
+      ));
+    }
+
     list($name, $function) = explode('.', $call, 2);
 
     return $this->client($name, function ($client) use ($function, $data, $options) {

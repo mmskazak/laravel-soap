@@ -13,7 +13,9 @@ class ServiceProvider extends LaravelServiceProvider
    */
   public function boot()
   {
-    // Nothing here
+    $this->publishes([
+      __DIR__ . '/../../../config/soapwrapper.php' => config_path('soapwrapper.php'),
+    ], 'soapwrapper-config');
   }
 
   /**
@@ -23,6 +25,8 @@ class ServiceProvider extends LaravelServiceProvider
    */
   public function register()
   {
+    $this->mergeConfigFrom(__DIR__ . '/../../../config/soapwrapper.php', 'soapwrapper');
+
     $this->app->singleton(SoapWrapper::class, function ($app) {
       $soapWrapper = new SoapWrapper();
 
