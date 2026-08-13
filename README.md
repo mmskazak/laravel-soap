@@ -108,33 +108,24 @@ How to add a service to the wrapper and use it.
 
 namespace App\Http\Controllers;
 
+use Artisaninweb\SoapWrapper\Service;
 use Artisaninweb\SoapWrapper\SoapWrapper;
 use App\Soap\Request\GetConversionAmount;
 use App\Soap\Response\GetConversionAmountResponse;
 
 class SoapController
 {
-  /**
-   * @var SoapWrapper
-   */
-  protected $soapWrapper;
-
-  /**
-   * SoapController constructor.
-   *
-   * @param SoapWrapper $soapWrapper
-   */
-  public function __construct(SoapWrapper $soapWrapper)
-  {
-    $this->soapWrapper = $soapWrapper;
+  public function __construct(
+    protected SoapWrapper $soapWrapper,
+  ) {
   }
 
   /**
    * Use the SoapWrapper
    */
-  public function show() 
+  public function show(): void
   {
-    $this->soapWrapper->add('Currency', function ($service) {
+    $this->soapWrapper->add('Currency', function (Service $service): void {
       $service
         ->wsdl('http://currencyconverter.kowabunga.net/converter.asmx?WSDL')
         ->trace(true)
@@ -146,9 +137,9 @@ class SoapController
 
     // Without classmap
     $response = $this->soapWrapper->call('Currency.GetConversionAmount', [
-      'CurrencyFrom' => 'USD', 
-      'CurrencyTo'   => 'EUR', 
-      'RateDate'     => '2014-06-05', 
+      'CurrencyFrom' => 'USD',
+      'CurrencyTo'   => 'EUR',
+      'RateDate'     => '2014-06-05',
       'Amount'       => '1000',
     ]);
 
@@ -168,7 +159,7 @@ class SoapController
 Service functions
 ============
 ```php
-$this->soapWrapper->add('Currency', function ($service) {
+$this->soapWrapper->add('Currency', function (Service $service): void {
     $service
         ->wsdl()                 // The WSDL url
         ->trace(true)            // Optional: (parameter: true/false)
@@ -232,6 +223,10 @@ If you are using classmap you can add folders like for example:
 
 Request: App\Soap\Request\GetConversionAmount
 
+> **Note:** `SoapClient` maps object properties to XML elements by their exact property name, so
+> `CurrencyFrom`, `CurrencyTo`, etc. must keep the PascalCase names required by the WSDL — only
+> the surrounding syntax is modernized for PHP 8.0+ below.
+
 ```php
 <?php
 
@@ -239,70 +234,30 @@ namespace App\Soap\Request;
 
 class GetConversionAmount
 {
-  /**
-   * @var string
-   */
-  protected $CurrencyFrom;
-
-  /**
-   * @var string
-   */
-  protected $CurrencyTo;
-
-  /**
-   * @var string
-   */
-  protected $RateDate;
-
-  /**
-   * @var string
-   */
-  protected $Amount;
-
-  /**
-   * GetConversionAmount constructor.
-   *
-   * @param string $CurrencyFrom
-   * @param string $CurrencyTo
-   * @param string $RateDate
-   * @param string $Amount
-   */
-  public function __construct($CurrencyFrom, $CurrencyTo, $RateDate, $Amount)
-  {
-    $this->CurrencyFrom = $CurrencyFrom;
-    $this->CurrencyTo   = $CurrencyTo;
-    $this->RateDate     = $RateDate;
-    $this->Amount       = $Amount;
+  public function __construct(
+    protected string $CurrencyFrom,
+    protected string $CurrencyTo,
+    protected string $RateDate,
+    protected string $Amount,
+  ) {
   }
 
-  /**
-   * @return string
-   */
-  public function getCurrencyFrom()
+  public function getCurrencyFrom(): string
   {
     return $this->CurrencyFrom;
   }
 
-  /**
-   * @return string
-   */
-  public function getCurrencyTo()
+  public function getCurrencyTo(): string
   {
     return $this->CurrencyTo;
   }
 
-  /**
-   * @return string
-   */
-  public function getRateDate()
+  public function getRateDate(): string
   {
     return $this->RateDate;
   }
 
-  /**
-   * @return string
-   */
-  public function getAmount()
+  public function getAmount(): string
   {
     return $this->Amount;
   }
@@ -318,25 +273,12 @@ namespace App\Soap\Response;
 
 class GetConversionAmountResponse
 {
-  /**
-   * @var string
-   */
-  protected $GetConversionAmountResult;
-
-  /**
-   * GetConversionAmountResponse constructor.
-   *
-   * @param string
-   */
-  public function __construct($GetConversionAmountResult)
-  {
-    $this->GetConversionAmountResult = $GetConversionAmountResult;
+  public function __construct(
+    protected string $GetConversionAmountResult,
+  ) {
   }
 
-  /**
-   * @return string
-   */
-  public function getGetConversionAmountResult()
+  public function getGetConversionAmountResult(): string
   {
     return $this->GetConversionAmountResult;
   }
